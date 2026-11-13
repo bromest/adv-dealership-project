@@ -87,4 +87,9 @@ public class Vehicle {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%d | %d | %s | %s | %s | %s | %d | %s", vin,year,make,model,vehicleType,color,odometer,price);
+    }
 }
