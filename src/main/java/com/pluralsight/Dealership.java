@@ -1,6 +1,7 @@
 package com.pluralsight;
 
-import java.util.Scanner;
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.ArrayList;
 
 public class Dealership {
@@ -16,11 +17,49 @@ public class Dealership {
         this.phone = phone;
         this.inventory = new ArrayList<>();
     }
+
     //get vehicles within a price range
-    //get vehicles by make and model
-    //get vehicles by year range
-    //get vehicles by color
-    //get vehicles by mileage
-    //get vehicles by type
-    //return all vehicles
-}
+    public List<Vehicle> getVehiclesByPrice(BigDecimal min, BigDecimal max) {
+        List<Vehicle> result = new ArrayList<>();
+
+        for (Vehicle vehicle : inventory) {
+            BigDecimal price = vehicle.getPrice();
+
+            if (price.compareTo(min) >= 0 &&
+                    price.compareTo(max) <= 0) {
+                    result.add(vehicle);
+                }
+            }
+                return result;
+        }
+        //get vehicles by make and model
+        public List<Vehicle> getVehiclesByMakeModel(String make, String model) {
+            List<Vehicle> result = new ArrayList<>();
+
+            for (Vehicle vehicle : inventory) {
+                if (vehicle.getMake().equalsIgnoreCase(make)
+                        && vehicle.getModel().equalsIgnoreCase(model)) {
+                    result.add(vehicle);
+                }
+            }
+
+            return result;
+        }
+        //get vehicles by year range
+        public List<Vehicle> getVehiclesByYear(int min, int max) {
+            List<Vehicle> result = new ArrayList<>();
+
+            for (Vehicle vehicle : inventory) {
+                if (vehicle.getYear() >= min && vehicle.getYear() <= max) {
+                    result.add(vehicle);
+                }
+            }
+
+            return result;
+        }
+        //get vehicles by color
+        //get vehicles by mileage
+        //get vehicles by type
+        //return all vehicles
+    }
+
