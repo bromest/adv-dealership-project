@@ -37,6 +37,7 @@ public class Dealership {
             List<Vehicle> result = new ArrayList<>();
 
             for (Vehicle vehicle : inventory) {
+
                 if (vehicle.getMake().equalsIgnoreCase(make)
                         && vehicle.getModel().equalsIgnoreCase(model)) {
                     result.add(vehicle);
@@ -58,7 +59,29 @@ public class Dealership {
             return result;
         }
         //get vehicles by color
+        public List<Vehicle> getVehiclesByColor(String color) {
+            List<Vehicle> result = new ArrayList<>();
+
+            for (Vehicle vehicle : inventory) {
+                if (vehicle.getColor().equalsIgnoreCase(color)) {
+                    result.add(vehicle);
+                }
+            }
+
+            return result;
+        }
         //get vehicles by mileage
+        public List<Vehicle> getVehiclesByMileage(int min, int max) {
+            List<Vehicle> result = new ArrayList<>();
+
+            for (Vehicle vehicle : inventory) {
+                if (vehicle.getOdometer() >= min && vehicle.getOdometer() <= max) {
+                    result.add(vehicle);
+                }
+            }
+
+            return result;
+        }
         //get vehicles by type
         //return all vehicles
     }
