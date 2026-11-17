@@ -18,6 +18,19 @@ public class Dealership {
         this.inventory = new ArrayList<>();
     }
 
+    //getter
+    public String getName() {
+        return name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
     public void addVehicleToInventory(Vehicle vehicle) {
         this.inventory.add(vehicle);
     }
@@ -95,10 +108,16 @@ public class Dealership {
                     result.add(vehicle);
                 }
             }
-
             return result;
         }
-        //return all vehicles
+        //remove vehicle from csv file
+    public void removeVehicleFromInventory(int vin) {
+
+        inventory.removeIf(vehicle ->
+                vehicle.getVin() == vin);
+    }
+
+    //return all vehicles
         public List<Vehicle> getAllVehicles() {
 
             return new ArrayList<>(inventory);
