@@ -1,16 +1,12 @@
 package com.pluralsight;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
 
 public class DealershipFileManager {
     Dealership dealership;
 
     public Dealership getDealership() {
-
 
         try {
             BufferedReader reader = new BufferedReader(new FileReader("inventory.csv"));
@@ -62,15 +58,41 @@ public class DealershipFileManager {
                     "Vehicles Loaded: "
                             + dealership.getAllVehicles().size());
 
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         return dealership;
     }
+    // Saves dealership inventory to inventory.csv
     public void saveDealership(Dealership dealership) {
-        //TODO: ADD FUNCTION FOR THIS METHOD
-    }
+        try (BufferedWriter writer =
+                     new BufferedWriter(
+                             new FileWriter("inventory.csv"))) {
 
+            writer.write(
+                    dealership.getName() + "|" +
+                            dealership.getAddress() + "|" +
+                            dealership.getPhone());
+
+            writer.newLine();
+
+            for (Vehicle vehicle : dealership.getAllVehicles()) {
+
+                writer.write(
+                        vehicle.getVin() + "|" +
+                                vehicle.getYear() + "|" +
+                                vehicle.getMake() + "|" +
+                                vehicle.getModel() + "|" +
+                                vehicle.getVehicleType() + "|" +
+                                vehicle.getColor() + "|" +
+                                vehicle.getOdometer() + "|" +
+                                vehicle.getPrice());
+
+                writer.newLine();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
