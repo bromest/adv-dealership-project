@@ -7,15 +7,19 @@ import java.util.ArrayList;
 public class Dealership {
     private String name;
     private String address;
-    private int phone;
-    private ArrayList<Vehicle> inventory;
+    private String phone;
+    private final ArrayList<Vehicle> inventory;
 
     //constructor
-    public Dealership(String name, String address, int phone) {
+    public Dealership(String name, String address, String phone) {
         this.name = name;
         this.address = address;
         this.phone = phone;
         this.inventory = new ArrayList<>();
+    }
+
+    public void addVehicleToInventory(Vehicle vehicle) {
+        this.inventory.add(vehicle);
     }
 
     //get vehicles within a price range
@@ -96,7 +100,8 @@ public class Dealership {
         }
         //return all vehicles
         public List<Vehicle> getAllVehicles() {
-            return inventory;
+
+            return new ArrayList<>(inventory);
         }
     }
 

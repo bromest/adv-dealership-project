@@ -7,9 +7,10 @@ import java.io.IOException;
 import java.math.BigDecimal;
 
 public class DealershipFileManager {
+    Dealership dealership;
+
     public Dealership getDealership() {
 
-        Dealership dealership = null;
 
         try {
             BufferedReader reader = new BufferedReader(new FileReader("inventory.csv"));
@@ -20,10 +21,10 @@ public class DealershipFileManager {
             if (line != null) {
                 String[] dealershipInfo = line.split("\\|");
 
-                dealership = new Dealership(
+                this.dealership = new Dealership(
                         dealershipInfo[0],
                         dealershipInfo[1],
-                        Integer.parseInt(dealershipInfo[2])
+                        dealershipInfo[2]
                 );
             }
 
@@ -51,7 +52,16 @@ public class DealershipFileManager {
                         odometer,
                         price
                 );
-        }
+
+                dealership.addVehicleToInventory(vehicle);
+            }
+
+            reader.close();
+
+            System.out.println(
+                    "Vehicles Loaded: "
+                            + dealership.getAllVehicles().size());
+
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -62,4 +72,5 @@ public class DealershipFileManager {
     public void saveDealership(Dealership dealership) {
         //TODO: ADD FUNCTION FOR THIS METHOD
     }
+
 }
