@@ -1,5 +1,7 @@
 package com.dealership;
 
+import java.math.BigDecimal;
+
 public abstract class Contract {
     private String date;
     private String customerName;
@@ -46,4 +48,7 @@ public abstract class Contract {
     public void setVehicleSold(Vehicle vehicleSold) {
         this.vehicleSold = vehicleSold;
     }
+    public abstract BigDecimal getTotalPrice();
+
+    public abstract BigDecimal getMonthlyPayment();
 }

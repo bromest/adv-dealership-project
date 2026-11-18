@@ -43,4 +43,36 @@ public class SalesContract extends Contract {
     public void setFinanced(boolean financed) {
         isFinanced = financed;
     }
+    @Override
+    public BigDecimal getTotalPrice() {
+        return getVehicleSold().getPrice()
+                .add(salesTaxAmount)
+                .add(recordingFee)
+                .add(processingFee)
+                .setScale(2, RoundingMode.HALF_UP);
+    }
+
+    @Override
+    public BigDecimal getMonthlyPayment() {
+        if (!isFinanced) {
+            return BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
+        }
+
+        double totalPrice = getTotalPrice().doubleValue();
+        double annualRate;
+        int months;
+
+        if (getVehicleSold().getPrice().compareTo(new BigDecimal("10000.00")) >= 0) {
+            annualRate = 0.0425;
+            months = 48;
+        } else {
+            annualRate = 0.0525;
+            months = 24;
+        }
+
+        double monthlyRate = annualRate / 12.0;
+        double payment = (totalPrice * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -months));
+
+        return BigDecimal.valueOf(payment).setScale(2, RoundingMode.HALF_UP);
+    }
 }
