@@ -1,5 +1,6 @@
 package com.dealership;
 
+import java.time.LocalDate;
 import  java.util.Scanner;
 import java.util.List;
 import java.math.BigDecimal;
@@ -30,6 +31,7 @@ public class UserInterface {
             System.out.println("7 - List ALL vehicles");
             System.out.println("8 - Add Vehicle");
             System.out.println("9 - Remove Vehicle");
+            System.out.println("10 - Sell / Lease a vehicle");
             System.out.println("99 - Exit");
             System.out.print("Enter your choice: ");
 
@@ -63,6 +65,9 @@ public class UserInterface {
                     break;
                 case 9:
                     processRemoveVehicleRequest();
+                    break;
+                case 10:
+                    processSellOrLeaseVehicleRequest();
                     break;
                 case 99:
                     running = false;
@@ -228,4 +233,57 @@ public class UserInterface {
 
         displayVehicles(vehicles);
     }
+    private void processSellOrLeaseVehicleRequest() {
+
+        System.out.print("Enter VIN of the vehicle to sell or lease: ");
+        int vin = Integer.parseInt(scanner.nextLine().trim());
+
+        Vehicle vehicle = null;
+        for (Vehicle v : dealership.getAllVehicles()) {
+            if (v.getVin() == vin) {
+                vehicle = v;
+                break;
+            }
+        }
+
+        System.out.print("Enter contract date (YYYYMMDD): ");
+        String date = scanner.nextLine().trim();
+
+        System.out.print("Enter customer name: ");
+        String customerName = scanner.nextLine().trim();
+
+        System.out.print("Enter customer email: ");
+        String customerEmail = scanner.nextLine().trim();
+
+        System.out.print("Is this a Sale or a Lease? (S/L): ");
+        String type = scanner.nextLine().trim().toUpperCase();
+
+        Contract contract;
+        if (type.equals("S")) {
+            System.out.print("Would you like to finance this purchase? (Y/N): ");
+            boolean isFinanced = scanner.nextLine().trim().equalsIgnoreCase("Y");
+            contract = new SalesContract(date, customerName, customerEmail, vehicle, isFinanced);
+        } else if (type.equals("L")) {
+            int currentYear = LocalDate.now().getYear();
+            if ((currentYear - vehicle.getYear()) > 3) {
+                System.out.println("Error: Vehicles over 3 years old cannot be leased.");
+                return;
+            }
+            contract = new LeaseContract(date, customerName, customerEmail, vehicle);
+        } else {
+            System.out.println("Invalid selection. Transaction cancelled.");
+            return;
+        }
+        // Save contract to contracts.csv
+        ContractDataManager contractManager = new ContractDataManager();
+        contractManager.saveContract(contract);
+
+        // Remove vehicle from inventory and save updated inventory.csv
+        dealership.removeVehicleFromInventory(vehicle.getVin());
+        new DealershipFileManager().saveDealership(dealership);
+
+        System.out.printf("Transaction complete! Total Price: $%.2f | Monthly Payment: $%.2f%n",
+                contract.getTotalPrice(), contract.getMonthlyPayment());
+    }
+
 }
