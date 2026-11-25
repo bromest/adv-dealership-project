@@ -1,14 +1,14 @@
 package com.dealership;
 
 import java.time.LocalDate;
-import  java.util.Scanner;
+import java.util.Scanner;
 import java.util.List;
 import java.math.BigDecimal;
 
 public class UserInterface {
 
     private Dealership dealership;
-    private Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
 
     public UserInterface() {
 
